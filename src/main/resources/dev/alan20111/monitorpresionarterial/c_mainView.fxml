@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.geometry.Insets?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.layout.*?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.alan20111.monitorpresionarterial.controllers.c_mainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="Monitor de Presión Arterial" styleClass="h2, text-primary"/>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <tabs>
+            <Tab text="Gestión de Pacientes">
+                <VBox spacing="15">
+                    <padding><Insets top="15" right="10" bottom="10" left="10"/></padding>
+                    
+                    <Label text="Registrar / Editar Paciente" styleClass="h4"/>
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="Nombres:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="b"/>
+                        <TextField fx:id="txtNombres" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Apellidos:" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="b"/>
+                        <TextField fx:id="txtApellidos" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                        <Label text="Fecha Nacimiento:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="b"/>
+                        <DatePicker fx:id="dpFechaNac" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Género:" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="b"/>
+                        <ComboBox fx:id="cmbGenero" GridPane.columnIndex="3" GridPane.rowIndex="1" promptText="Seleccione..."/>
+
+                        <Label text="Peso (kg):" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="b"/>
+                        <TextField fx:id="txtPeso" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Altura (m):" GridPane.columnIndex="2" GridPane.rowIndex="2" styleClass="b"/>
+                        <TextField fx:id="txtAltura" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                    </GridPane>
+                    
+                    <HBox spacing="10">
+                        <Button fx:id="btnGuardarPaciente" text="Guardar Paciente" onAction="#guardarPaciente" styleClass="btn, btn-primary"/>
+                        <Button text="Eliminar Paciente" onAction="#eliminarPaciente" styleClass="btn, btn-danger"/>
+                        <Button text="Limpiar Formulario" onAction="#limpiarFormularioPaciente" styleClass="btn, btn-default"/>
+                    </HBox>
+
+                    <Separator/>
+                    <Label text="Doble clic en un paciente para editarlo / Un clic para ver sus mediciones" styleClass="h6, text-muted"/>
+                    <TableView fx:id="tblPacientes" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colPacId" text="ID" prefWidth="50"/>
+                            <TableColumn fx:id="colPacNombres" text="Nombres" prefWidth="150"/>
+                            <TableColumn fx:id="colPacApellidos" text="Apellidos" prefWidth="150"/>
+                            <TableColumn fx:id="colPacFechaNac" text="Fecha Nac." prefWidth="100"/>
+                            <TableColumn fx:id="colPacGenero" text="Género" prefWidth="80"/>
+                            <TableColumn fx:id="colPacPeso" text="Peso" prefWidth="70"/>
+                            <TableColumn fx:id="colPacAltura" text="Altura" prefWidth="70"/>
+                            <TableColumn fx:id="colPacDiagnostico" text="Diagnóstico" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <Tab text="Captura de Mediciones">
+                <VBox spacing="15">
+                    <padding><Insets top="15" right="10" bottom="10" left="10"/></padding>
+
+                    <Label text="Registrar / Editar Medición" styleClass="h4"/>
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="Paciente:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="b"/>
+                        <ComboBox fx:id="cmbPacientesMedicion" GridPane.columnIndex="1" GridPane.rowIndex="0" promptText="Seleccione paciente..." prefWidth="200"/>
+
+                        <Label text="Presión Sistólica:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="b"/>
+                        <TextField fx:id="txtSistolica" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Presión Diastólica:" GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="b"/>
+                        <TextField fx:id="txtDiastolica" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                        <Label text="Pulsos:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="b"/>
+                        <TextField fx:id="txtPulsos" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+
+                    <HBox spacing="10">
+                        <Button fx:id="btnGuardarMedicion" text="Guardar Medición" onAction="#guardarMedicion" styleClass="btn, btn-success"/>
+                        <Button text="Eliminar Medicion" onAction="#eliminarMedicion" styleClass="btn, btn-danger"/>
+                        <Button text="Limpiar Formulario" onAction="#limpiarFormularioMedicion" styleClass="btn, btn-default"/>
+                        <Button text="Ver TODAS las mediciones" onAction="#cargarTodasLasMediciones" styleClass="btn, btn-info"/>
+                    </HBox>
+
+                    <Separator/>
+                    <Label text="Doble clic en una medición para editarla" styleClass="h6, text-muted"/>
+                    <TableView fx:id="tblMediciones" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colMedId" text="ID Med." prefWidth="60"/>
+                            <TableColumn fx:id="colMedIdPac" text="ID Paciente" prefWidth="80"/>
+                            <TableColumn fx:id="colMedSis" text="Sistólica" prefWidth="80"/>
+                            <TableColumn fx:id="colMedDia" text="Diastólica" prefWidth="80"/>
+                            <TableColumn fx:id="colMedPulso" text="Pulsos" prefWidth="80"/>
+                            <TableColumn fx:id="colMedFecha" text="Fecha y Hora" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>
