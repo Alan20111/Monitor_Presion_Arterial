@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "dev.alan20111"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -52,5 +52,9 @@ jlink {
     options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
     launcher {
         name = "app"
+    }
+    jpackage {
+        imageName = "MonitorPresionArterial"
+        skipInstaller = true
     }
 }
