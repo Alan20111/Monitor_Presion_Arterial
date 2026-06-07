@@ -35,8 +35,11 @@
   .muted{color:#8a8a8a;font-size:12.5px;margin:10px 0 6px}
   hr{border:none;border-top:1px solid #cfcfcf;margin:14px 0}
 
-  .grid{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:10px 12px;align-items:center;max-width:760px}
-  .grid label{font-weight:700;font-size:13px;color:#333;white-space:nowrap}
+  .form2{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;max-width:840px}
+  .field{display:flex;align-items:center;gap:10px}
+  .field label{width:152px;flex-shrink:0;font-weight:700;font-size:13px;color:#333;white-space:nowrap}
+  .field input,.field select{flex:1;min-width:0}
+  @media(max-width:640px){.form2{grid-template-columns:1fr}}
   input,select{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid #b9b9b9;border-radius:3px;
     background:#fff;color:#1f1f1f;width:100%}
   input:focus,select:focus{outline:none;border-color:#337ab7;box-shadow:0 0 0 2px rgba(51,122,183,.25)}
@@ -84,13 +87,13 @@
       <div class="tabpane">
         <div class="pane active" id="pane-pac">
           <h4 class="sec">Registrar / Editar Paciente</h4>
-          <div class="grid">
-            <label>Nombres:</label><input id="pNom" placeholder="Ej. María">
-            <label>Apellidos:</label><input id="pApe" placeholder="Ej. López">
-            <label>Fecha Nacimiento:</label><input id="pFn" type="date" value="1990-05-12">
-            <label>Género:</label><select id="pGen"><option value="">Seleccione...</option><option>Masculino</option><option>Femenino</option></select>
-            <label>Peso (kg):</label><input id="pPeso" type="number" step="0.1" placeholder="68">
-            <label>Altura (m):</label><input id="pAlt" type="number" step="0.01" placeholder="1.65">
+          <div class="form2">
+            <div class="field"><label>Nombres:</label><input id="pNom" placeholder="Ej. María"></div>
+            <div class="field"><label>Apellidos:</label><input id="pApe" placeholder="Ej. López"></div>
+            <div class="field"><label>Fecha Nacimiento:</label><input id="pFn" type="date" value="1990-05-12"></div>
+            <div class="field"><label>Género:</label><select id="pGen"><option value="">Seleccione...</option><option>Masculino</option><option>Femenino</option></select></div>
+            <div class="field"><label>Peso (kg):</label><input id="pPeso" type="number" step="0.1" placeholder="68"></div>
+            <div class="field"><label>Altura (m):</label><input id="pAlt" type="number" step="0.01" placeholder="1.65"></div>
           </div>
           <div class="btns">
             <button class="btn btn-primary" id="btnPac" onclick="guardarPaciente()">Guardar Paciente</button>
@@ -106,11 +109,13 @@
         </div>
         <div class="pane" id="pane-med">
           <h4 class="sec">Registrar / Editar Medición</h4>
-          <div class="grid">
-            <label>Paciente:</label><select id="mPac"></select><span></span><span></span>
-            <label>Presión Sistólica:</label><input id="mSis" type="number" placeholder="120">
-            <label>Presión Diastólica:</label><input id="mDia" type="number" placeholder="80">
-            <label>Pulsos:</label><input id="mPul" type="number" placeholder="72"><span></span><span></span>
+          <div class="form2">
+            <div class="field"><label>Paciente:</label><select id="mPac"></select></div>
+            <div></div>
+            <div class="field"><label>Presión Sistólica:</label><input id="mSis" type="number" placeholder="120"></div>
+            <div class="field"><label>Presión Diastólica:</label><input id="mDia" type="number" placeholder="80"></div>
+            <div class="field"><label>Pulsos:</label><input id="mPul" type="number" placeholder="72"></div>
+            <div></div>
           </div>
           <div class="btns">
             <button class="btn btn-success" onclick="guardarMedicion()">Guardar Medición</button>
