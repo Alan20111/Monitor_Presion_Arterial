@@ -80,6 +80,16 @@
   .info .cap{font-size:.72rem;color:#7d8896;margin:6px 0 0;line-height:1.4}
   .info .gh{display:block;text-align:center;background:#161b22;border:1px solid #2a3140;color:#e6edf3;border-radius:8px;padding:8px;font-size:.85rem;margin-top:8px;text-decoration:none}
   .info code{background:#1c2230;padding:1px 4px;border-radius:4px;font-size:.8rem}
+
+  .dlbox{margin-top:10px}
+  .dlhead{font-size:.82rem;color:#9aa7b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .dlmain{display:block;text-align:center;background:#238636;color:#fff;border-radius:8px;padding:11px 10px;font-weight:700;font-size:.92rem;text-decoration:none;line-height:1.3}
+  .dlmain:hover{filter:brightness(1.1)}
+  .dlmain .rec{display:inline-block;background:rgba(255,255,255,.22);border-radius:6px;padding:1px 7px;font-size:.7rem;font-weight:600;margin-left:6px;vertical-align:middle}
+  .dlrow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:9px}
+  .dlrow .oth{font-size:.74rem;color:#7d8896;width:100%}
+  .dlrow a{font-size:.8rem;color:#c9d4e2;background:#161b22;border:1px solid #2a3140;border-radius:7px;padding:6px 10px;text-decoration:none}
+  .dlrow a:hover{border-color:#3a4456;color:#fff}
 </style>
 </head>
 <body>
@@ -160,8 +170,12 @@
       <li>Validaciones y alertas de confirmación.</li>
     </ul>
     <div class="chips"><span>JavaFX</span><span>BootstrapFX</span><span>MySQL</span><span>MVC + DAO</span></div>
-    <a class="dl" href="https://github.com/Alan20111/Monitor_Presion_Arterial/releases">⬇ Descargar .jar</a>
-    <div class="cap">Ejecutable JavaFX. El Release se publica con <code>./gradlew jar</code> (ver BUILD‑INSTRUCTIONS).</div>
+    <div class="dlbox">
+      <div class="dlhead">⬇ Descargar app de escritorio</div>
+      <a class="dlmain" id="dlMain" href="#" target="_blank" rel="noopener">Cargando…</a>
+      <div class="dlrow" id="dlRow"></div>
+      <div class="cap">Apps autocontenidas (no requieren tener Java). Descomprime y ejecuta.</div>
+    </div>
     <a class="gh" href="https://github.com/Alan20111/Monitor_Presion_Arterial">&lt;/&gt; Código en GitHub</a>
   </aside>
   </div>
@@ -251,6 +265,33 @@ function verTodas(){soloPac=null;selPac=null;renderPac();renderMed();setTab('med
 function val(id){return document.getElementById(id).value.trim();}
 function setv(id,v){document.getElementById(id).value=v;}
 renderPac();renderMed();
+</script>
+<script>
+(function(){
+  var APP="MonitorPresionArterial", REPO="Monitor_Presion_Arterial";
+  var base="https://github.com/Alan20111/"+REPO+"/releases/download/latest/"+APP+"-";
+  var files={windows:base+"windows.zip",macos:base+"macos.zip",linux:base+"linux.zip"};
+  var labels={windows:"Windows (.exe)",macos:"macOS (.app)",linux:"Linux"};
+  var icons={windows:"\uD83E\uDE9F",macos:"\uD83C\uDF4E",linux:"\uD83D\uDC27"};
+  function detect(){
+    var p=((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||"").toLowerCase();
+    var ua=(navigator.userAgent||"").toLowerCase();
+    if(p.indexOf("win")>=0||ua.indexOf("windows")>=0)return"windows";
+    if(p.indexOf("mac")>=0||ua.indexOf("mac os")>=0||ua.indexOf("macintosh")>=0)return"macos";
+    if(p.indexOf("linux")>=0||ua.indexOf("linux")>=0||ua.indexOf("x11")>=0)return"linux";
+    return"windows";
+  }
+  var os=detect();
+  var all=["windows","macos","linux"];
+  var others=all.filter(function(x){return x!==os;});
+  var main=document.getElementById("dlMain");
+  main.href=files[os];
+  main.innerHTML="\u2B07 Descargar para "+icons[os]+" "+labels[os]+" <span class='rec'>Recomendado</span>";
+  var row=document.getElementById("dlRow");
+  row.innerHTML="<span class='oth'>Otros sistemas:</span>"+others.map(function(x){
+    return "<a href='"+files[x]+"'>"+icons[x]+" "+labels[x]+"</a>";
+  }).join("");
+})();
 </script>
 </body>
 </html>
