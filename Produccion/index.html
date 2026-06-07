@@ -5,103 +5,132 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Monitor de Presión Arterial — Demo (Alan Méndez)</title>
 <style>
-  :root{--bg:#0d1117;--accent:#1565c0;--accent2:#0d47a1;--ink:#1f2733;--muted:#5b6675;
-    --line:#dfe4ea;--card:#ffffff;--soft:#f4f6f9;}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',system-ui,sans-serif;background:radial-gradient(900px 500px at 50% -5%,#13233f,var(--bg));
-    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:22px 10px;color:#e6edf3}
-  .lead{text-align:center;margin-bottom:14px}
-  .lead h1{font-size:1.3rem}.lead p{color:#9aa7b8;font-size:.88rem;margin-top:3px}
+  body{margin:0;background:#0d1117;color:#e6edf3;font-family:'Segoe UI',system-ui,sans-serif;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 10px}
+  .lead{text-align:center;margin-bottom:12px}
+  .lead h1{font-size:1.25rem;margin:0}.lead p{color:#9aa7b8;font-size:.85rem;margin:3px 0 0}
   .lead a{color:#5aa2ff;text-decoration:none}
-  /* ventana estilo app de escritorio */
-  .win{width:min(96vw,980px);background:var(--card);color:var(--ink);border-radius:12px;overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.55);border:1px solid #11141a}
-  .titlebar{background:linear-gradient(180deg,#1976d2,#1565c0);color:#fff;display:flex;align-items:center;
-    gap:10px;padding:9px 14px;font-weight:600;font-size:.95rem}
-  .dots{display:flex;gap:6px;margin-right:6px}
-  .dots i{width:11px;height:11px;border-radius:50%;display:inline-block}
-  .dots i:nth-child(1){background:#ff5f57}.dots i:nth-child(2){background:#febc2e}.dots i:nth-child(3){background:#28c840}
-  .body{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media(max-width:760px){.body{grid-template-columns:1fr}}
-  .card{border:1px solid var(--line);border-radius:10px;background:var(--card)}
-  .card h2{font-size:1rem;background:var(--soft);padding:10px 14px;border-bottom:1px solid var(--line);
-    border-radius:10px 10px 0 0;color:var(--accent2)}
-  .card .pad{padding:14px}
-  label{display:block;font-size:.78rem;color:var(--muted);margin:8px 0 3px}
-  input,select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:7px;font-size:.88rem;color:var(--ink);background:#fff}
-  input:focus,select:focus{outline:none;border-color:var(--accent)}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .btn{margin-top:12px;width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px;
-    font-weight:600;font-size:.9rem;cursor:pointer}
-  .btn:hover{background:var(--accent2)}
-  .btn.sm{width:auto;padding:4px 10px;font-size:.75rem;margin:0}
-  table{width:100%;border-collapse:collapse;font-size:.8rem}
-  th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line)}
-  th{background:var(--soft);color:var(--muted);font-weight:600;position:sticky;top:0}
-  .tablewrap{max-height:230px;overflow:auto;border-top:1px solid var(--line)}
-  tr:hover td{background:#f0f7ff;cursor:pointer}
-  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.7rem;font-weight:700;white-space:nowrap}
-  .t-ok{background:#e6f4ea;color:#1e7e34}.t-warn{background:#fff4e0;color:#b8860b}
-  .t-bad{background:#fde8e8;color:#c0392b}.t-mid{background:#eaf2fd;color:#1565c0}.t-gray{background:#eee;color:#666}
-  .hint{font-size:.74rem;color:var(--muted);margin-top:8px;line-height:1.5}
+
+  .win{width:min(98vw,1000px);background:#f4f4f4;border:1px solid #2b2b2b;border-radius:6px;overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.55);color:#1f1f1f}
+  .titlebar{height:30px;background:linear-gradient(#f7f7f7,#e4e4e4);border-bottom:1px solid #c4c4c4;
+    display:flex;align-items:center;padding:0 8px;font-size:12.5px;color:#333;gap:8px}
+  .titlebar .ico{width:14px;height:14px;background:#337ab7;border-radius:3px;display:inline-block}
+  .titlebar .winbtns{margin-left:auto;display:flex}
+  .titlebar .winbtns span{width:34px;height:22px;display:flex;align-items:center;justify-content:center;color:#555;font-size:12px}
+  .titlebar .winbtns span:hover{background:#d8d8d8}
+  .titlebar .winbtns .cls:hover{background:#e81123;color:#fff}
+
+  .content{padding:18px}
+  h2.title{font-size:1.55rem;font-weight:600;color:#337ab7;margin:0 0 12px}
+
+  .tabs{display:flex;border-bottom:1px solid #b6b6b6;gap:2px}
+  .tab{padding:8px 18px;font-size:13px;background:#dcdcdc;border:1px solid #b6b6b6;border-bottom:none;
+    border-radius:5px 5px 0 0;cursor:pointer;color:#444;position:relative;top:1px}
+  .tab.active{background:#f4f4f4;color:#1f1f1f;font-weight:600;border-bottom:1px solid #f4f4f4}
+  .tabpane{border:1px solid #b6b6b6;border-top:none;background:#f4f4f4;padding:16px}
+  .pane{display:none}.pane.active{display:block}
+
+  h4.sec{font-size:1.05rem;font-weight:600;margin:0 0 12px}
+  .muted{color:#8a8a8a;font-size:12.5px;margin:10px 0 6px}
+  hr{border:none;border-top:1px solid #cfcfcf;margin:14px 0}
+
+  .grid{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:10px 12px;align-items:center;max-width:760px}
+  .grid label{font-weight:700;font-size:13px;color:#333;white-space:nowrap}
+  input,select{font-family:inherit;font-size:13px;padding:5px 8px;border:1px solid #b9b9b9;border-radius:3px;
+    background:#fff;color:#1f1f1f;width:100%}
+  input:focus,select:focus{outline:none;border-color:#337ab7;box-shadow:0 0 0 2px rgba(51,122,183,.25)}
+
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .btn{font-family:inherit;font-size:13px;padding:7px 14px;border-radius:4px;border:1px solid transparent;cursor:pointer;color:#fff}
+  .btn-primary{background:#337ab7;border-color:#2e6da4}.btn-primary:hover{background:#286090}
+  .btn-success{background:#5cb85c;border-color:#4cae4c}.btn-success:hover{background:#449d44}
+  .btn-danger{background:#d9534f;border-color:#d43f3a}.btn-danger:hover{background:#c9302c}
+  .btn-info{background:#5bc0de;border-color:#46b8da}.btn-info:hover{background:#31b0d5}
+  .btn-default{background:#fff;border-color:#ccc;color:#333}.btn-default:hover{background:#e6e6e6}
+
+  .tableview{border:1px solid #b9b9b9;border-radius:3px;overflow:hidden;background:#fff;margin-top:4px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  thead th{background:linear-gradient(#fbfbfb,#e8e8e8);border-right:1px solid #d0d0d0;border-bottom:1px solid #c2c2c2;
+    text-align:left;padding:6px 9px;font-weight:600;color:#333}
+  tbody td{padding:6px 9px;border-right:1px solid #ededed;border-bottom:1px solid #ededed;color:#222}
+  tbody tr:nth-child(even){background:#f5f9fc}
+  tbody tr.sel,tbody tr.sel td{background:#0096c9;color:#fff}
+  tbody tr{cursor:pointer}
+  tbody tr:hover:not(.sel){background:#e9f3fb}
+  .tag{display:inline-block;padding:1px 8px;border-radius:3px;font-size:11px;font-weight:700}
+  .t-ok{background:#dff0d8;color:#3c763d}.t-warn{background:#fcf8e3;color:#8a6d3b}
+  .t-bad{background:#f2dede;color:#a94442}.t-mid{background:#d9edf7;color:#31708f}.t-gray{background:#eee;color:#777}
+  .scroll{max-height:240px;overflow:auto}
+  .empty{padding:14px;text-align:center;color:#999;font-size:12.5px}
 </style>
 </head>
 <body>
   <div class="lead">
     <h1>🩺 Monitor de Presión Arterial</h1>
-    <p>Demo web del proyecto JavaFX (originalmente JavaFX + MySQL) · <a href="https://portafolio-ten-olive-50.vercel.app/">← Volver al portafolio</a></p>
+    <p>Demo web fiel al proyecto JavaFX (JavaFX + BootstrapFX + MySQL) · <a href="https://portafolio-ten-olive-50.vercel.app/">← Volver al portafolio</a></p>
   </div>
 
   <div class="win">
-    <div class="titlebar"><span class="dots"><i></i><i></i><i></i></span> Monitor de Presión Arterial — Alan Méndez</div>
-    <div class="body">
-      <!-- Pacientes -->
-      <section class="card">
-        <h2>👤 Pacientes</h2>
-        <div class="pad">
-          <div class="grid2">
-            <div><label>Nombres</label><input id="pNom" placeholder="Ej. María"></div>
-            <div><label>Apellidos</label><input id="pApe" placeholder="Ej. López"></div>
+    <div class="titlebar"><span class="ico"></span> Monitor de Presión Arterial
+      <span class="winbtns"><span>—</span><span>▢</span><span class="cls">✕</span></span>
+    </div>
+    <div class="content">
+      <h2 class="title">Monitor de Presión Arterial</h2>
+      <div class="tabs">
+        <div class="tab active" data-tab="pac" onclick="setTab('pac')">Gestión de Pacientes</div>
+        <div class="tab" data-tab="med" onclick="setTab('med')">Captura de Mediciones</div>
+      </div>
+      <div class="tabpane">
+        <div class="pane active" id="pane-pac">
+          <h4 class="sec">Registrar / Editar Paciente</h4>
+          <div class="grid">
+            <label>Nombres:</label><input id="pNom" placeholder="Ej. María">
+            <label>Apellidos:</label><input id="pApe" placeholder="Ej. López">
+            <label>Fecha Nacimiento:</label><input id="pFn" type="date" value="1990-05-12">
+            <label>Género:</label><select id="pGen"><option value="">Seleccione...</option><option>Masculino</option><option>Femenino</option></select>
+            <label>Peso (kg):</label><input id="pPeso" type="number" step="0.1" placeholder="68">
+            <label>Altura (m):</label><input id="pAlt" type="number" step="0.01" placeholder="1.65">
           </div>
-          <div class="grid2">
-            <div><label>Fecha de nacimiento</label><input id="pFn" type="date" value="1990-05-12"></div>
-            <div><label>Género</label><select id="pGen"><option>Femenino</option><option>Masculino</option></select></div>
+          <div class="btns">
+            <button class="btn btn-primary" id="btnPac" onclick="guardarPaciente()">Guardar Paciente</button>
+            <button class="btn btn-danger" onclick="eliminarPaciente()">Eliminar Paciente</button>
+            <button class="btn btn-default" onclick="limpiarPaciente()">Limpiar Formulario</button>
           </div>
-          <div class="grid2">
-            <div><label>Peso (kg)</label><input id="pPeso" type="number" step="0.1" placeholder="68"></div>
-            <div><label>Altura (m)</label><input id="pAlt" type="number" step="0.01" placeholder="1.65"></div>
+          <hr>
+          <div class="muted">Doble clic en un paciente para editarlo / Un clic para ver sus mediciones</div>
+          <div class="tableview"><div class="scroll">
+            <table><thead><tr><th>ID</th><th>Nombres</th><th>Apellidos</th><th>Fecha Nac.</th><th>Género</th><th>Peso</th><th>Altura</th><th>Diagnóstico</th></tr></thead>
+            <tbody id="tblPac"></tbody></table>
+          </div></div>
+        </div>
+        <div class="pane" id="pane-med">
+          <h4 class="sec">Registrar / Editar Medición</h4>
+          <div class="grid">
+            <label>Paciente:</label><select id="mPac"></select><span></span><span></span>
+            <label>Presión Sistólica:</label><input id="mSis" type="number" placeholder="120">
+            <label>Presión Diastólica:</label><input id="mDia" type="number" placeholder="80">
+            <label>Pulsos:</label><input id="mPul" type="number" placeholder="72"><span></span><span></span>
           </div>
-          <button class="btn" id="btnPac" onclick="guardarPaciente()">Guardar Paciente</button>
-        </div>
-        <div class="tablewrap">
-          <table><thead><tr><th>ID</th><th>Nombre</th><th>Edad</th><th>Género</th><th>IMC</th><th>Diagnóstico</th></tr></thead>
-          <tbody id="tblPac"></tbody></table>
-        </div>
-      </section>
-
-      <!-- Mediciones -->
-      <section class="card">
-        <h2>❤️ Mediciones</h2>
-        <div class="pad">
-          <label>Paciente</label><select id="mPac"></select>
-          <div class="grid2">
-            <div><label>Sistólica (mmHg)</label><input id="mSis" type="number" placeholder="120"></div>
-            <div><label>Diastólica (mmHg)</label><input id="mDia" type="number" placeholder="80"></div>
+          <div class="btns">
+            <button class="btn btn-success" onclick="guardarMedicion()">Guardar Medición</button>
+            <button class="btn btn-danger" onclick="eliminarMedicion()">Eliminar Medicion</button>
+            <button class="btn btn-default" onclick="limpiarMedicion()">Limpiar Formulario</button>
+            <button class="btn btn-info" onclick="verTodas()">Ver TODAS las mediciones</button>
           </div>
-          <label>Pulso (lpm)</label><input id="mPul" type="number" placeholder="72">
-          <button class="btn" id="btnMed" onclick="guardarMedicion()">Guardar Medición</button>
-          <div class="hint">Selecciona un paciente de la tabla para ver/registrar sus mediciones. La clasificación de presión sigue las categorías de la AHA.</div>
+          <hr>
+          <div class="muted" id="medHint">Doble clic en una medición para editarla</div>
+          <div class="tableview"><div class="scroll">
+            <table><thead><tr><th>ID Med.</th><th>ID Paciente</th><th>Sistólica</th><th>Diastólica</th><th>Pulsos</th><th>Fecha y Hora</th><th>Clasificación</th></tr></thead>
+            <tbody id="tblMed"></tbody></table>
+          </div></div>
         </div>
-        <div class="tablewrap">
-          <table><thead><tr><th>Paciente</th><th>Sis</th><th>Dia</th><th>Pulso</th><th>Fecha</th><th>Clasificación</th></tr></thead>
-          <tbody id="tblMed"></tbody></table>
-        </div>
-      </section>
+      </div>
     </div>
   </div>
 
 <script>
-let pacId=4, medId=6, filtroPac=null;
+let pacId=4, medId=6, selPac=null, soloPac=null, edPac=null, edMed=null;
 const pacientes=[
   {id:1,nom:"María",ape:"López",fn:"1985-03-22",gen:"Femenino",peso:62,alt:1.62},
   {id:2,nom:"Carlos",ape:"Ramírez",fn:"1968-11-09",gen:"Masculino",peso:88,alt:1.74},
@@ -115,68 +144,76 @@ const mediciones=[
   {id:5,idp:3,sis:110,dia:70,pul:66,f:"2026-06-04 16:40"},
 ];
 const hoy=new Date("2026-06-07");
-function edad(fn){const d=new Date(fn);let a=hoy.getFullYear()-d.getFullYear();
-  const m=hoy.getMonth()-d.getMonth(); if(m<0||(m===0&&hoy.getDate()<d.getDate()))a--; return a;}
-function imc(p){if(!p.alt||!p.peso)return null; return p.peso/(p.alt*p.alt);}
-function diagPeso(p){const v=imc(p); if(v===null)return ["Sin datos","t-gray"];
-  if(v<18.5)return ["Bajo peso","t-mid"]; if(v<25)return ["Normal","t-ok"];
-  if(v<30)return ["Sobrepeso","t-warn"]; return ["Obesidad","t-bad"];}
-function clasPresion(s,d){
-  if(s>180||d>120)return ["Crisis hipertensiva","t-bad"];
-  if(s>=140||d>=90)return ["Hipertensión 2","t-bad"];
-  if(s>=130||d>=80)return ["Hipertensión 1","t-warn"];
-  if(s>=120)return ["Elevada","t-warn"];
-  return ["Normal","t-ok"];}
-
+function edad(fn){const d=new Date(fn);let a=hoy.getFullYear()-d.getFullYear();const m=hoy.getMonth()-d.getMonth();
+  if(m<0||(m===0&&hoy.getDate()<d.getDate()))a--;return a;}
+function imc(p){return (p.alt>0&&p.peso>0)?p.peso/(p.alt*p.alt):null;}
+function diag(p){const v=imc(p);if(v===null)return["Sin datos","t-gray"];if(v<18.5)return["Bajo peso","t-mid"];
+  if(v<25)return["Normal","t-ok"];if(v<30)return["Sobrepeso","t-warn"];return["Obesidad","t-bad"];}
+function clas(s,d){if(s>180||d>120)return["Crisis hipertensiva","t-bad"];if(s>=140||d>=90)return["Hipertensión 2","t-bad"];
+  if(s>=130||d>=80)return["Hipertensión 1","t-warn"];if(s>=120)return["Elevada","t-warn"];return["Normal","t-ok"];}
+function setTab(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  document.getElementById('pane-pac').classList.toggle('active',t==='pac');
+  document.getElementById('pane-med').classList.toggle('active',t==='med');}
 function renderPac(){
-  const tb=document.getElementById('tblPac'); tb.innerHTML='';
-  pacientes.forEach(p=>{
-    const v=imc(p), [dx,cls]=diagPeso(p);
-    const tr=document.createElement('tr');
-    if(filtroPac===p.id)tr.style.background="#e3f0ff";
-    tr.innerHTML=`<td>${p.id}</td><td>${p.nom} ${p.ape}</td><td>${edad(p.fn)}</td><td>${p.gen}</td>
-      <td>${v?v.toFixed(1):'—'}</td><td><span class="tag ${cls}">${dx}</span></td>`;
-    tr.onclick=()=>{filtroPac=p.id; document.getElementById('mPac').value=p.id; renderPac(); renderMed();};
-    tb.appendChild(tr);
-  });
-  const sel=document.getElementById('mPac'); const cur=sel.value;
-  sel.innerHTML=pacientes.map(p=>`<option value="${p.id}">${p.nom} ${p.ape}</option>`).join('');
-  if(cur)sel.value=cur; if(filtroPac)sel.value=filtroPac;
+  const tb=document.getElementById('tblPac');tb.innerHTML='';
+  pacientes.forEach(p=>{const v=imc(p),[dx,c]=diag(p);const tr=document.createElement('tr');
+    if(selPac===p.id)tr.className='sel';
+    tr.innerHTML=`<td>${p.id}</td><td>${p.nom}</td><td>${p.ape}</td><td>${p.fn}</td><td>${p.gen}</td>
+      <td>${p.peso}</td><td>${p.alt}</td><td>${v?v.toFixed(1)+' · ':''}<span class="tag ${c}">${dx}</span></td>`;
+    tr.onclick=()=>{selPac=p.id;soloPac=p.id;renderPac();renderMed();};
+    tr.ondblclick=()=>editarPaciente(p);
+    tb.appendChild(tr);});
+  const sel=document.getElementById('mPac');
+  sel.innerHTML='<option value="">Seleccione paciente...</option>'+pacientes.map(p=>`<option value="${p.id}">${p.nom} ${p.ape}</option>`).join('');
+  if(soloPac)sel.value=soloPac;
 }
 function renderMed(){
-  const tb=document.getElementById('tblMed'); tb.innerHTML='';
-  const data=mediciones.filter(m=>!filtroPac||m.idp===filtroPac).slice().reverse();
-  if(!data.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#999">Sin mediciones</td></tr>';return;}
-  data.forEach(m=>{
-    const p=pacientes.find(x=>x.id===m.idp); const [cl,cls]=clasPresion(m.sis,m.dia);
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${p?p.nom:'?'}</td><td><b>${m.sis}</b></td><td>${m.dia}</td><td>${m.pul}</td>
-      <td>${m.f}</td><td><span class="tag ${cls}">${cl}</span></td>`;
-    tb.appendChild(tr);
-  });
+  const tb=document.getElementById('tblMed');tb.innerHTML='';
+  const data=mediciones.filter(m=>!soloPac||m.idp===soloPac).slice().reverse();
+  document.getElementById('medHint').textContent= soloPac
+    ? 'Mostrando mediciones del paciente seleccionado · doble clic para editar'
+    : 'Doble clic en una medición para editarla';
+  if(!data.length){tb.innerHTML='<tr><td colspan="7" class="empty">No hay mediciones</td></tr>';return;}
+  data.forEach(m=>{const[cl,c]=clas(m.sis,m.dia);const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${m.id}</td><td>${m.idp}</td><td>${m.sis}</td><td>${m.dia}</td><td>${m.pul}</td>
+      <td>${m.f}</td><td><span class="tag ${c}">${cl}</span></td>`;
+    tr.ondblclick=()=>editarMedicion(m);
+    tb.appendChild(tr);});
 }
 function guardarPaciente(){
-  const nom=document.getElementById('pNom').value.trim(), ape=document.getElementById('pApe').value.trim();
-  const peso=parseFloat(document.getElementById('pPeso').value), alt=parseFloat(document.getElementById('pAlt').value);
-  if(!nom||!ape){alert("Completa nombres y apellidos.");return;}
-  if(!(peso>0)||!(alt>0)){alert("Verifica los datos (peso y altura deben ser números).");return;}
-  pacientes.push({id:pacId++,nom,ape,fn:document.getElementById('pFn').value,gen:document.getElementById('pGen').value,peso,alt});
-  ['pNom','pApe','pPeso','pAlt'].forEach(id=>document.getElementById(id).value='');
-  renderPac(); alert("Paciente guardado (demo). No se envía a ningún servidor.");
+  const nom=val('pNom'),ape=val('pApe'),peso=parseFloat(val('pPeso')),alt=parseFloat(val('pAlt')),gen=val('pGen');
+  if(!nom||!ape){alert('Atención: completa nombres y apellidos.');return;}
+  if(!(peso>0)||!(alt>0)){alert('Error: verifica los datos (peso y altura deben ser números).');return;}
+  if(edPac){Object.assign(edPac,{nom,ape,fn:val('pFn'),gen,peso,alt});alert('Éxito: Paciente actualizado.');}
+  else{pacientes.push({id:pacId++,nom,ape,fn:val('pFn'),gen,peso,alt});alert('Éxito: Paciente guardado.');}
+  limpiarPaciente();renderPac();
 }
+function editarPaciente(p){edPac=p;setv('pNom',p.nom);setv('pApe',p.ape);setv('pFn',p.fn);setv('pGen',p.gen);
+  setv('pPeso',p.peso);setv('pAlt',p.alt);document.getElementById('btnPac').textContent='Actualizar Paciente';}
+function eliminarPaciente(){if(!edPac){alert('Atención: selecciona (doble clic) un paciente.');return;}
+  if(mediciones.some(m=>m.idp===edPac.id)){alert('No se puede eliminar: el paciente tiene mediciones ligadas a su expediente.');return;}
+  if(confirm('Confirmar Eliminación: esta acción no se puede deshacer.')){
+    pacientes.splice(pacientes.indexOf(edPac),1);limpiarPaciente();renderPac();renderMed();}}
+function limpiarPaciente(){edPac=null;['pNom','pApe','pPeso','pAlt'].forEach(id=>setv(id,''));
+  document.getElementById('btnPac').textContent='Guardar Paciente';}
 function guardarMedicion(){
-  const idp=parseInt(document.getElementById('mPac').value,10);
-  const s=parseInt(document.getElementById('mSis').value,10), d=parseInt(document.getElementById('mDia').value,10),
-        pu=parseInt(document.getElementById('mPul').value,10);
-  if(!idp){alert("Selecciona un paciente.");return;}
-  if(!(s>0)||!(d>0)){alert("Verifica sistólica y diastólica.");return;}
+  const idp=parseInt(val('mPac'),10),s=parseInt(val('mSis'),10),d=parseInt(val('mDia'),10),pu=parseInt(val('mPul'),10);
+  if(!idp){alert('Advertencia: Selecciona un paciente.');return;}
+  if(!(s>0)||!(d>0)){alert('Error: verifica sistólica y diastólica.');return;}
   const now="2026-06-07 "+new Date().toTimeString().slice(0,5);
-  mediciones.push({id:medId++,idp,sis:s,dia:d,pul:pu||0,f:now});
-  ['mSis','mDia','mPul'].forEach(id=>document.getElementById(id).value='');
-  filtroPac=idp; renderPac(); renderMed();
-  const [cl]=clasPresion(s,d); alert("Medición guardada (demo). Clasificación: "+cl);
+  if(edMed){Object.assign(edMed,{idp,sis:s,dia:d,pul:pu||0});alert('Éxito: Medición actualizada.');}
+  else{mediciones.push({id:medId++,idp,sis:s,dia:d,pul:pu||0,f:now});const[cl]=clas(s,d);alert('Éxito: Medición guardada. Clasificación: '+cl);}
+  soloPac=idp;limpiarMedicion();renderPac();renderMed();
 }
-renderPac(); renderMed();
+function editarMedicion(m){edMed=m;document.getElementById('mPac').value=m.idp;setv('mSis',m.sis);setv('mDia',m.dia);setv('mPul',m.pul);setTab('med');}
+function eliminarMedicion(){if(!edMed){alert('Atención: selecciona (doble clic) una medición.');return;}
+  if(confirm('Confirmar Eliminación: esta acción no se puede deshacer.')){
+    mediciones.splice(mediciones.indexOf(edMed),1);limpiarMedicion();renderMed();}}
+function limpiarMedicion(){edMed=null;['mSis','mDia','mPul'].forEach(id=>setv(id,''));}
+function verTodas(){soloPac=null;selPac=null;renderPac();renderMed();setTab('med');}
+function val(id){return document.getElementById(id).value.trim();}
+function setv(id,v){document.getElementById(id).value=v;}
+renderPac();renderMed();
 </script>
 </body>
 </html>
